@@ -1,0 +1,10 @@
+# Ignore system files
+AppData/
+venv/
+__pycache__/
+.env
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
