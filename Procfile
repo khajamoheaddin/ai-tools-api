@@ -1,1 +1,1 @@
-web: python grammar_checker.py
+web: gunicorn app:app

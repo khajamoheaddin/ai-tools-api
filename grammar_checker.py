@@ -1,8 +1,9 @@
-from flask import Flask, request, jsonify
+from flask import Blueprint, request, jsonify
 import requests
 import os
 
-app = Flask(__name__)
+# Create a Blueprint for the grammar checker tool
+grammar_checker_bp = Blueprint('grammar_checker', __name__)
 
 # Deepseek R1 LLM API endpoint
 DEEPSEEK_API_URL = "https://api.deepseek.com/v1/grammar_check"
@@ -10,7 +11,7 @@ DEEPSEEK_API_URL = "https://api.deepseek.com/v1/grammar_check"
 # API key for Deepseek R1 LLM (store securely in environment variables)
 DEEPSEEK_API_KEY = os.getenv("sk-352c361f073447e480b6f69d812a7229")
 
-@app.route("/check_grammar", methods=["POST"])
+@grammar_checker_bp.route("/check_grammar", methods=["POST"])
 def check_grammar():
     """
     Endpoint to handle grammar checking requests.
@@ -23,9 +24,7 @@ def check_grammar():
     if not text:
         return jsonify({"error": "No text provided"}), 400
 
-    # ----- LLM PROMPT INTEGRATION -----
     # Customize the prompt sent to the LLM here.
-    # Example prompt:
     prompt = f"""
     Analyze the following text for grammar, spelling, punctuation, and style errors. 
     Provide detailed corrections and explanations for each error. 
@@ -53,6 +52,3 @@ def check_grammar():
         return jsonify(result)
     except requests.exceptions.RequestException as e:
         return jsonify({"error": str(e)}), 500
-
-if __name__ == "__main__":
-    app.run(debug=True)
